@@ -282,8 +282,8 @@ PairDistances(symmatrix_t **distmat, mseq_t *mseq, int pairdist_type, bool bPerc
     int uSeqIndex;
     unsigned long int ulStepNo = 0, ulTotalStepNo; /* DD: moved from SquidIdPairDist so progress bar works multithreaded */
     int iChunk, iChunkStart, iChunkEnd;
-    int iChunkStarts[iNumberOfThreads];
-    int iChunkEnds[iNumberOfThreads];
+    int* iChunkStarts = (int*) malloc(sizeof(int)*iNumberOfThreads);
+    int* iChunkEnds   = (int*) malloc(sizeof(int)*iNumberOfThreads);
     progress_t *prProgress = NULL;
     int iSquidSuccess = 0;
     bool bPrintCR = (rLog.iLogLevelEnabled<=LOG_VERBOSE) ? FALSE : TRUE;
@@ -379,7 +379,11 @@ PairDistances(symmatrix_t **distmat, mseq_t *mseq, int pairdist_type, bool bPerc
                                     &ulStepNo, ulTotalStepNo);
             }
             if(iSquidSuccess != 0)
+            {
+                free(iChunkStarts);
+                free(iChunkEnds);
                 return -1;
+            }
 
         } else if (PAIRDIST_SQUIDID_KIMURA == pairdist_type) {
             Log(&rLog, LOG_INFO, "Calculating Kimura-corrected pairwise aligned identity distances...");
@@ -396,7 +400,11 @@ PairDistances(symmatrix_t **distmat, mseq_t *mseq, int pairdist_type, bool bPerc
                                     &ulStepNo, ulTotalStepNo);
             }
             if(iSquidSuccess != 0)
+            {
+                free(iChunkStarts);
+                free(iChunkEnds);
                 return -1;
+            }
         } else {
             Log(&rLog, LOG_FATAL, "INTERNAL ERROR: don't know about pairdist_type %d",
                   pairdist_type);
@@ -430,6 +438,9 @@ PairDistances(symmatrix_t **distmat, mseq_t *mseq, int pairdist_type, bool bPerc
         ProgressDone(prProgress);
         FreeProgress(&prProgress);
     }
+    
+    free(iChunkStarts);
+    free(iChunkEnds);
     
     return 0;
 }

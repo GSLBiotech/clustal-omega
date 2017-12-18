@@ -52,12 +52,17 @@ typedef struct {
     int iLogLevelEnabled;
 } log_t;
 
-
+//Wrap because Visual Studio C++ compiler mangles global variables.
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* a standard logger */
 extern log_t rLog;
 
-
+#ifdef __cplusplus
+}
+#endif
 
 void
 LogDefaultSetup(log_t *log);

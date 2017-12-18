@@ -12,12 +12,16 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <unistd.h>
 #include "squid.h"
 #include "ssi.h"
 #ifdef CLUSTALO
 #include <limits.h>
 #endif
+
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+
 
 static sqd_uint32 v20magic = 0xf3f3e9b1; /* SSI 1.0: "ssi1" + 0x80808080 */
 static sqd_uint32 v20swap  = 0xb1e9f3f3; /* byteswapped */

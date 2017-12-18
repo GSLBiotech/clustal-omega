@@ -56,12 +56,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #ifdef SRE_ENABLE_PVM
 #include <pvm3.h>
 #endif
 
 #include "stopwatch.h"
+
+#ifndef SRE_STRICT_ANSI          
+#  include <unistd.h>
+#endif
 
 /* Function: format_time_string()
  * Date:     SRE, Fri Nov 26 15:06:28 1999 [St. Louis]

@@ -18,7 +18,6 @@
  */
 
 #include <stdbool.h>
-#include <unistd.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,6 +53,10 @@ char *amino_strong[] = {"STA", "NEQK", "NHQK", "NDEQ", "QHRK", "MILV",
 char *amino_weak[] = {"CSA", "ATV", "SAG", "STNK", "STPA", "SGND",
     "SNDEQK", "NDEQHK", "NEQHRK", "FVLIM", "HFY", NULL};
 
+#endif
+
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>
 #endif
 
 #ifdef TESTDRIVE_CLUSTAL

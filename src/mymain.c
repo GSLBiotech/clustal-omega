@@ -25,11 +25,18 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
-#include <unistd.h>
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
 #include <argtable2.h>
 #include <ctype.h>
 #include <limits.h>
-#include <libgen.h> /* for basename only */
+
+#ifdef WIN32
+#  define basename(PATH) PATH
+#else
+#  include <libgen.h> /* for basename only */
+#endif
 
 /* clustal */
 #include "clustal-omega.h"

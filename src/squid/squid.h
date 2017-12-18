@@ -20,8 +20,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-#include <unistd.h>		/* for sysconf() #define's       */
-
 
 #if DEBUGLEVEL > 0
 #include <assert.h>		/* for SQD_DASSERT1(), etc.      */
@@ -34,6 +32,10 @@
 #else
 #include "clustal-omega-config.h"
 #define CLUSTALO 1
+#endif
+
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>		/* for sysconf() #define's       */
 #endif
 
 #ifdef CLUSTALO

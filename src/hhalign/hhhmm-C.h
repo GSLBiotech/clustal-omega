@@ -1731,7 +1731,7 @@ HMM::UseSecStrucDependentGapPenalties()
   int i;   // column in HMM
   int ii;
   //unsigned char iis[MAXRES]; // inside-integer array
-  unsigned char iis[par.maxResLen]; // inside-integer array
+  unsigned char* iis = (unsigned char*) malloc(par.maxResLen); // inside-integer array
   float d; // Additional penalty for opening gap whithin SS element
   float e; // Additional penalty for extending gap whithin SS element
       
@@ -1773,6 +1773,7 @@ HMM::UseSecStrucDependentGapPenalties()
       printf("Col SS II\n");
       for (i=0; i<=L; ++i) printf("%3i  %c %2i\n",i,i2ss(ss_dssp[i]),iis[i]);
     }
+  free(iis);
   return;
 }
 

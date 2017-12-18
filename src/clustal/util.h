@@ -18,9 +18,12 @@
 
 #include <limits.h>
 #include <string.h>
-#include <strings.h>
+#if !defined(WIN32) || defined(__MINGW32__)
+#  include <strings.h>
+#endif
 #include <stdarg.h>
 #include <stdbool.h>
+#include "log.h"
 
 #ifndef CLUSTALO_UTIL_H
 #define CLUSTALO_UTIL_H

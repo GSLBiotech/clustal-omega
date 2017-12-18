@@ -867,7 +867,7 @@ Hit::Backward(HMM& q, HMM& t)
         {
             const int i0=0, i1=q.L;
             const int j0=0, j1=t.L;
-            double scale_prod[q.L+2];
+            double* scale_prod = (double*)malloc(sizeof(double)*(q.L+2));
             scale_prod[q.L] = scale[q.L+1];
             for (i=q.L-1; i>=1; i--) scale_prod[i] = scale_prod[i+1] * scale[i+1];
             
@@ -897,6 +897,7 @@ Hit::Backward(HMM& q, HMM& t)
                     printf("\n");
                 }
             printf("\n");
+            free(scale_prod);
         }
     
     if (v>=4) printf("\nForward total probability ratio: %8.3G\n",Pforward);

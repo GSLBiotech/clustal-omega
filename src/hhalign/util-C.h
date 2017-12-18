@@ -28,7 +28,15 @@
 #include <stdlib.h>   // exit
 #include <time.h>     // clock
 #endif
-#include <sys/time.h>
+
+// For ElapsedTimeSinceFirstCall, ElapsedTimeSinceLastCall.
+#ifdef WIN32          
+#  include <windows.h>
+#  include <string>
+#else
+#  include <sys/time.h>
+#endif
+
 //#include "new_new.h" /* memory tracking */
 #include "../config.h"
 
@@ -686,6 +694,40 @@ inline char* strsubst(char* str, const char str1[], const char str2[])
   return ptr;
 }
 
+#ifdef WIN32
+inline void ElapsedTimeSinceFirstCall(const char str[]) 
+{
+  LARGE_INTEGER frequency;
+  QueryPerformanceFrequency(& frequency);
+  
+  LARGE_INTEGER t;
+  static double tfirst=0.0;
+  if (tfirst==0.0) 
+  {
+    QueryPerformanceCounter(& t);
+    tfirst = double(t.QuadPart)/frequency.QuadPart;
+  }  
+  QueryPerformanceCounter(& t);
+  printf("Elapsed time since first call:%12.3fs %s\n",double(t.QuadPart)/frequency.QuadPart - tfirst,str);
+}
+inline void ElapsedTimeSinceLastCall(const char str[]) 
+{
+  LARGE_INTEGER frequency;
+  QueryPerformanceFrequency(& frequency);
+  
+  LARGE_INTEGER t;
+  static double tlast=0.0;
+  if (tlast==0.0) 
+  {
+    QueryPerformanceCounter(& t);
+    tlast = double(t.QuadPart)/frequency.QuadPart;
+  }  
+  QueryPerformanceCounter(& t);
+  double tnow = double(t.QuadPart)/frequency.QuadPart;
+  printf("Elapsed time since last call:%12.3fs %s\n",tnow - tlast,str);
+  tlast = tnow;
+}
+#else
 // Gives elapsed time since first call to this function
 inline void ElapsedTimeSinceFirstCall(const char str[]) 
 {
@@ -714,6 +756,7 @@ inline void ElapsedTimeSinceLastCall(const char str[])
   printf("Elapsed time since last call:%12.3fs %s\n",1.0E-6*t.tv_usec + t.tv_sec - tlast,str);
   tlast = 1.0E-6*t.tv_usec + t.tv_sec;
 }
+#endif
 
 inline char* RemovePath(char outname[], char filename[])
 {
@@ -873,11 +916,11 @@ inline float frand() { return rand()/(RAND_MAX+1.0); }
 void runSystem(std::string cmd, int v = 2)
 {
   if (v>2)
-    cout << "Command: " << cmd << "!\n";
+    std::cout << "Command: " << cmd << "!\n";
   int res = system(cmd.c_str());
   if (res!=0) 
     {
-      cerr << endl << "ERROR when executing: " << cmd << "!\n";
+      std::cerr << std::endl << "ERROR when executing: " << cmd << "!\n";
       exit(1);
     }
     

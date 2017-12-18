@@ -481,7 +481,7 @@ HitList::TryPoint(const int ndim, double* p, double* y, double* psum, int ihigh,
   // => p_try = fac1*sum_i(p_i) + fac2*p_high
   double fac1=(1.-fac)/ndim;
   double fac2=fac-fac1;
-  double ptry[ndim];   //new point to try out
+  double* ptry = new double[ndim];   //new point to try out
   double ytry;         //function value of new point 
   int j;               //index for the ndim parameters
 
@@ -499,7 +499,8 @@ HitList::TryPoint(const int ndim, double* p, double* y, double* psum, int ihigh,
 	}	                              //Note: ihigh is now not highest point anymore!
     }
 //   else if (v>=4) printf("Trying:                  %-7.3f %-7.3f %-7.3f -> reject\n",ptry[0],ptry[1],ytry);
-
+  delete[] ptry;
+  
   return ytry;
 }
 
@@ -521,7 +522,7 @@ HitList::FindMin(const int ndim, double* p, double* y, double tol, int& nfunc, d
   double rtol;  //tolerance: difference of function value between highest and lowest point of simplex
   double temp;   //dummy
   double ytry;   //function value of trial point
-  double psum[ndim]; //psum[j] = j'th coordinate of sum vector (sum over all vertex vectors)
+  double* psum = new double[ndim]; //psum[j] = j'th coordinate of sum vector (sum over all vertex vectors)
 
   nfunc=0;    //number of function evaluations =0
   //Calculate sum vector psum[j]
@@ -561,6 +562,7 @@ HitList::FindMin(const int ndim, double* p, double* y, double tol, int& nfunc, d
       if (nfunc>=MAXNFUNC ) 
 	{
 	  if (v) fprintf(stderr,"\nWARNING: maximum likelihood fit of score distribution did not converge.\n");
+    delete[] psum;
 	  return 1;
 	}
 
@@ -608,6 +610,7 @@ HitList::FindMin(const int ndim, double* p, double* y, double tol, int& nfunc, d
 	}
       else nfunc--;
     }
+  delete[] psum;
   return (float)rtol;
 }
 

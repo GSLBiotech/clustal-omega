@@ -44,6 +44,10 @@
 #define DEBUG
 #endif
 
+#if defined(TRACE) || defined(DEBUG)
+#  include "log.h"
+#endif
+
 #define MAX_BUF_SIZE 65536
 
 /**

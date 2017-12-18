@@ -47,6 +47,7 @@ using std::endl;
 #include "hhalignment.h" // class Alignment
 #include "hhhit.h"
 #include "hhhalfalignment.h"
+#include "../clustal/log.h"
 #endif
 //#include "new_new.h" /* memory tracking */
 
