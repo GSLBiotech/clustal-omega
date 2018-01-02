@@ -24,12 +24,16 @@ add_executable(clustalo_executable
                mymain.c)               
 set_target_properties(clustalo_executable PROPERTIES OUTPUT_NAME clustalo)
 
-set(EXTERNAL_LIBS argtable2)
-if(NOT WIN32)
-  set(EXTERNAL_LIBS "${EXTERNAL_LIBS} m")  
+target_link_libraries(clustalo_executable clustalo_library)
+if("ARGTABLE_LIBRARY" STREQUAL "")
+  target_link_libraries(clustalo_executable argtable2)  
+else()
+  target_link_libraries(clustalo_executable "${ARGTABLE_LIBRARY}")
 endif()
 
-target_link_libraries(clustalo_executable clustalo_library ${EXTERNAL_LIBS})
+if(NOT WIN32)
+  target_link_libraries(clustalo_executable m)
+endif()
 
 install(TARGETS clustalo_executable RUNTIME DESTINATION bin)
 install(TARGETS clustalo_library    ARCHIVE DESTINATION lib)

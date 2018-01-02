@@ -71,9 +71,13 @@ endif()
 
 #----------------------------------------------------------
 set(ARGTABLE_INCLUDE_DIR "" CACHE PATH "Where argbtable2 library headers can be found.")
-set(ARGTABLE_LIBRARY_DIR "" CACHE PATH "Where argbtable2 static library file can be found.")
+set(ARGTABLE_LIBRARY_DIR "" CACHE PATH "Where argbtable2 library file can be found. Alternative to ARGTABLE_LIBRARY.")
+set(ARGTABLE_LIBRARY     "" CACHE PATH "Absolute path to argbtable2 library to link. Alternative to ARGTABLE_LIBRARY_DIR.")
 
-# Try custom dir first. If found, result is cached.s
+# Try custom absolute path first. If found, subsequent checks are skipped.
+if(EXISTS "${ARGTABLE_LIBRARY}")
+  set(HAVE_LIBARGTABLE 1)
+endif()
 find_library(HAVE_LIBARGTABLE NAMES argtable2 PATHS ${ARGTABLE_LIBRARY_DIR} NO_DEFAULT_PATH)
 if(HAVE_LIBARGTABLE)
   link_directories(${ARGTABLE_LIBRARY_DIR})
